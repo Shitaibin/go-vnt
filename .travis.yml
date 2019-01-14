@@ -8,55 +8,55 @@ matrix:
       sudo: required
       go: 1.10.x
       script:
-      - sudo modprobe fuse
-      - sudo chmod 666 /dev/fuse
-      - sudo chown root:$USER /etc/fuse.conf
-      - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
-      - /bin/bash ./switch-clang-version.sh 5.0
-      - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
-      - make all
-      - go install -v ./cmd/gvnt
+        - sudo modprobe fuse
+        - sudo chmod 666 /dev/fuse
+        - sudo chown root:$USER /etc/fuse.conf
+        - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
+        - /bin/bash ./switch-clang-version.sh 5.0
+        - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
+        - make all
+        - go install -v ./cmd/gvnt
 
-    # # These are the latest Go versions.
-    # - os: linux
-    #   dist: trusty
-    #   sudo: required
-    #   go: 1.11.x
-    #   script:
-    #     - sudo modprobe fuse
-    #     - sudo chmod 666 /dev/fuse
-    #     - sudo chown root:$USER /etc/fuse.conf
-    #     - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
-    #     - /bin/bash ./switch-clang-version.sh 5.0
-    #     - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
-    #     - go run build/ci.go install
-    #     - go run build/ci.go test -coverage $TEST_PACKAGES
+    # These are the latest Go versions.
+    - os: linux
+      dist: trusty
+      sudo: required
+      go: 1.11.x
+      script:
+        - sudo modprobe fuse
+        - sudo chmod 666 /dev/fuse
+        - sudo chown root:$USER /etc/fuse.conf
+        - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
+        - /bin/bash ./switch-clang-version.sh 5.0
+        - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
+        - make all
+        - go install -v ./cmd/gvnt
 
-    # - os: osx
-    #   go: 1.11.x
-    #   script:
-    #     - echo "Increase the maximum number of open file descriptors on macOS"
-    #     - NOFILE=20480
-    #     - sudo sysctl -w kern.maxfiles=$NOFILE
-    #     - sudo sysctl -w kern.maxfilesperproc=$NOFILE
-    #     - sudo launchctl limit maxfiles $NOFILE $NOFILE
-    #     - sudo launchctl limit maxfiles
-    #     - ulimit -S -n $NOFILE
-    #     - ulimit -n
-    #     - unset -f cd # workaround for https://github.com/travis-ci/travis-ci/issues/8703
-    #     - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
-    #     - /bin/bash ./switch-clang-version.sh 5.0
-    #     - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
-    #     - go run build/ci.go install
-    #     - go run build/ci.go test -coverage $TEST_PACKAGES
+    - os: osx
+      go: 1.11.x
+      script:
+        - echo "Increase the maximum number of open file descriptors on macOS"
+        - NOFILE=20480
+        - sudo sysctl -w kern.maxfiles=$NOFILE
+        - sudo sysctl -w kern.maxfilesperproc=$NOFILE
+        - sudo launchctl limit maxfiles $NOFILE $NOFILE
+        - sudo launchctl limit maxfiles
+        - ulimit -S -n $NOFILE
+        - ulimit -n
+        - unset -f cd # workaround for https://github.com/travis-ci/travis-ci/issues/8703
+        - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
+        - /bin/bash ./switch-clang-version.sh 5.0
+        - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
+        - make all
+        - go install -v ./cmd/gvnt
 
-    # # This builder only tests code linters on latest version of Go
-    # - os: linux
-    #   dist: trusty
-    #   go: 1.11.x
-    #   env:
-    #     - lint
-    #   git:
-    #     submodules: false # avoid cloning vntchain/tests
-    #   script:
-    #     - go run build/ci.go lint
+    # This builder only tests code linters on latest version of Go
+    - os: linux
+      dist: trusty
+      go: 1.11.x
+      env:
+        - lint
+      git:
+        submodules: false # avoid cloning vntchain/tests
+      script:
+        - go run build/ci.go lint
