@@ -23,6 +23,10 @@ matrix:
 
     # These are the latest Go versions.
     - stage: Build & Test on linux go1.11.x
+      branches:
+        only:
+          - develop
+          - master
       os: linux
       dist: trusty
       sudo: required
@@ -40,6 +44,10 @@ matrix:
         - go install -v ./cmd/gvnt
 
     - stage: Build & Test on OSX
+      branches:
+        only:
+          - develop
+          - master
       os: osx
       go: 1.11.x
       before_install:
@@ -58,15 +66,3 @@ matrix:
       script:              
         - make all
         - go install -v ./cmd/gvnt
-
-    # This builder only tests code linters on latest version of Go
-    # - stage: "Go lint"
-    #   os: linux
-    #   dist: trusty
-    #   go: 1.11.x
-    #   env:
-    #     - lint
-    #   git:
-    #     submodules: false # avoid cloning vntchain/tests
-    #   script:
-    #     - go run build/ci.go lint
