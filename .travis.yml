@@ -1,6 +1,12 @@
 language: go
+go:
+  - "1.10.x"
+  - "1.11.x"
 go_import_path: github.com/vntchain/go-vnt
 sudo: false
+notifications:
+  slack: always
+
 matrix:
   include:
     - stage: Test linux go1.10.x
@@ -8,16 +14,19 @@ matrix:
       dist: trusty
       sudo: required
       go: 1.10.x
+      before_install:
+        - sudo modprobe fuse
+        - sudo chmod 666 /dev/fuse
+        - sudo chown root:$USER /etc/fuse.conf      
+      install:
+        - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
+        - /bin/bash ./switch-clang-version.sh 5.0
+        - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
       script:
-        - echo "script"
-        # - sudo modprobe fuse
-        # - sudo chmod 666 /dev/fuse
-        # - sudo chown root:$USER /etc/fuse.conf
-        # - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
-        # - /bin/bash ./switch-clang-version.sh 5.0
-        # - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
-        # - make all
-        # - go install -v ./cmd/gvnt
+        - make all
+        - go install -v ./cmd/gvnt
+       
+        
 
     # These are the latest Go versions.
     - stage: Test linux go1.11.x
