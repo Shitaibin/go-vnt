@@ -1,9 +1,7 @@
 language: go
 go_import_path: github.com/vntchain/go-vnt
 sudo: false
-notifications:
-  slack: always
-
+notifications: always
 matrix:
   include:
     - stage: Test linux go1.10.x
@@ -21,9 +19,7 @@ matrix:
         - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
       script:
         - make all
-        - go install -v ./cmd/gvnt
-       
-        
+        - go install -v ./cmd/gvnt              
 
     # These are the latest Go versions.
     - stage: Test linux go1.11.x
@@ -43,7 +39,7 @@ matrix:
         - make all
         - go install -v ./cmd/gvnt
 
-    - os: osx
+    - stage: "Build & Test on OSX"
       go: 1.11.x
       before_install:
         - echo "Increase the maximum number of open file descriptors on macOS"
@@ -62,8 +58,9 @@ matrix:
         - make all
         - go install -v ./cmd/gvnt
 
-    # # This builder only tests code linters on latest version of Go
-    # - os: linux
+    # This builder only tests code linters on latest version of Go
+    # - stage: "Go lint"
+    #   os: linux
     #   dist: trusty
     #   go: 1.11.x
     #   env:
