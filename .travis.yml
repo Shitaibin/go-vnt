@@ -31,32 +31,36 @@ matrix:
       dist: trusty
       sudo: required
       go: 1.11.x
-      script:
+      before_install:
         - sudo modprobe fuse
         - sudo chmod 666 /dev/fuse
-        - sudo chown root:$USER /etc/fuse.conf
+        - sudo chown root:$USER /etc/fuse.conf      
+      install:
         - wget https://raw.githubusercontent.com/go-clang/gen/master/scripts/switch-clang-version.sh
         - /bin/bash ./switch-clang-version.sh 5.0
         - sudo ln -s /usr/lib/llvm-5.0/lib/libclang*so /usr/lib/
+      script:
         - make all
         - go install -v ./cmd/gvnt
 
-    # - os: osx
-    #   go: 1.11.x
-    #   script:
-    #     - echo "Increase the maximum number of open file descriptors on macOS"
-    #     - NOFILE=20480
-    #     - sudo sysctl -w kern.maxfiles=$NOFILE
-    #     - sudo sysctl -w kern.maxfilesperproc=$NOFILE
-    #     - sudo launchctl limit maxfiles $NOFILE $NOFILE
-    #     - sudo launchctl limit maxfiles
-    #     - ulimit -S -n $NOFILE
-    #     - ulimit -n
-    #     - unset -f cd # workaround for https://github.com/travis-ci/travis-ci/issues/8703
-    #     - brew install llvm@5
-    #     - sudo ln -s /usr/local/opt/llvm@5/lib/libclang*dylib /usr/local/lib
-    #     - make all
-    #     - go install -v ./cmd/gvnt
+    - os: osx
+      go: 1.11.x
+      before_install:
+        - echo "Increase the maximum number of open file descriptors on macOS"
+        - NOFILE=20480
+        - sudo sysctl -w kern.maxfiles=$NOFILE
+        - sudo sysctl -w kern.maxfilesperproc=$NOFILE
+        - sudo launchctl limit maxfiles $NOFILE $NOFILE
+        - sudo launchctl limit maxfiles
+        - ulimit -S -n $NOFILE
+        - ulimit -n
+        - unset -f cd # workaround for https://github.com/travis-ci/travis-ci/issues/8703
+      install:
+        - brew install llvm@5
+        - sudo ln -s /usr/local/opt/llvm@5/lib/libclang*dylib /usr/local/lib
+      script:              
+        - make all
+        - go install -v ./cmd/gvnt
 
     # # This builder only tests code linters on latest version of Go
     # - os: linux
