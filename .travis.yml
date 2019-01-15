@@ -4,7 +4,7 @@ sudo: false
 notifications: always
 matrix:
   include:
-    - stage: Test linux go1.10.x
+    - stage: Build & Test on linux go1.10.x
       os: linux
       dist: trusty
       sudo: required
@@ -22,7 +22,7 @@ matrix:
         - go install -v ./cmd/gvnt              
 
     # These are the latest Go versions.
-    - stage: Test linux go1.11.x
+    - stage: Build & Test on linux go1.11.x
       os: linux
       dist: trusty
       sudo: required
@@ -39,7 +39,8 @@ matrix:
         - make all
         - go install -v ./cmd/gvnt
 
-    - stage: "Build & Test on OSX"
+    - stage: Build & Test on OSX
+      os: osx
       go: 1.11.x
       before_install:
         - echo "Increase the maximum number of open file descriptors on macOS"
